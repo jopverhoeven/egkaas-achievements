@@ -52,6 +52,7 @@ jobs:
           ghcr.io/${{ env.IMAGE_REPOSITORY }}/egkaas-achievements:${{github.sha}}
   
   deploy:
+    needs: [build-and-publish]
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
