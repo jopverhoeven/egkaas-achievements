@@ -18,7 +18,7 @@ export default function MainPage() {
             <Route path="/" exact>
               <HomeComponent></HomeComponent>
             </Route>
-            <Route path="/atjes" exact>
+            <Route path="/atjes">
               <ScoreboardComponent
                 {...{
                   name: "Atjes",
@@ -29,7 +29,7 @@ export default function MainPage() {
                 }}
               ></ScoreboardComponent>
             </Route>
-            <Route path="/rietas" exact>
+            <Route path="/rietas">
               <ScoreboardComponent
                 {...{
                   name: "Rietas",
@@ -40,7 +40,7 @@ export default function MainPage() {
                 }}
               ></ScoreboardComponent>
             </Route>
-            <Route path="/gewicht" exact>
+            <Route path="/gewicht">
               <ScoreboardComponent
                 {...{
                   name: "Zwaargewichten",

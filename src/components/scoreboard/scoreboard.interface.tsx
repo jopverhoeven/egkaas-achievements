@@ -4,6 +4,7 @@ interface Scoreboard {
     direction: 'asc' | 'desc';
     limit: 10 | 25;
     name: 'Atjes' | 'Rietas' | 'Zwaargewichten';
+    load?: Boolean;
 }
 
 export default Scoreboard;
