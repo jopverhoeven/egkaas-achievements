@@ -30,7 +30,6 @@ export default function ScoreboardFormComponent(props: ScoreboardForm) {
   }
 
   useEffect(() => {
-    console.log("tick");
     if (loading) return;
 
     if (!props) {
