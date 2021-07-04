@@ -20,7 +20,7 @@ export default function MainPage() {
             <Route path="/profile" exact>
               <ProfileComponent />
             </Route>
-            <Route path={["/atjes", "/atjes/new", "/atjes/:id"]}>
+            <Route path={["/atjes", "/atjes/new", "/atjes/:id"]} exact>
               <ScoreboardComponent
                 {...{
                   name: AchievementName.Atjes,
@@ -31,7 +31,7 @@ export default function MainPage() {
                 }}
               ></ScoreboardComponent>
             </Route>
-            <Route path={["/rietas", "/rietas/new", "/rietas/:id"]}>
+            <Route path={["/rietas", "/rietas/new", "/rietas/:id"]} exact>
               <ScoreboardComponent
                 {...{
                   name: AchievementName.Rietas,
@@ -42,7 +42,7 @@ export default function MainPage() {
                 }}
               ></ScoreboardComponent>
             </Route>
-            <Route path={["/gewicht", "/gewicht/new", "/gewicht/:id"]}>
+            <Route path={["/gewicht", "/gewicht/new", "/gewicht/:id"]} exact>
               <ScoreboardComponent
                 {...{
                   name: AchievementName.Zwaargewichten,
