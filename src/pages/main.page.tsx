@@ -1,51 +1,53 @@
 import ScoreboardComponent from "../components/scoreboard/scoreboard.component";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import HomeComponent from "../components/home/home.component";
 import NavComponent from "../components/nav/nav.component";
+import ProfileComponent from "../components/profile/profile.component";
+import AchievementName from "../abstraction/achievementname.enum";
+import AchievementCollection from "../abstraction/achievementcollection.enum";
+import AchievementType from "../abstraction/achievementtype.enum";
 
 export default function MainPage() {
   return (
     <div className="h-screen bg-gradient-to-br from-gray-600 via-teal-700 to-gray-800">
       <Router>
-        <Link to="/">
-          <div className="h-16 flex justify-center items-center bg-gray-800 text-gray-200 text-2xl font-semibold">
-            EGKaaS Achievements
-          </div>
-        </Link>
         <NavComponent></NavComponent>
-        <div className="flex flex-col text-white pt-8">
+        <div className="text-gray-100 mt-4">
           <Switch>
             <Route path="/" exact>
               <HomeComponent></HomeComponent>
             </Route>
-            <Route path="/atjes">
+            <Route path="/profile" exact>
+              <ProfileComponent />
+            </Route>
+            <Route path={["/atjes", "/atjes/new", "/atjes/:id"]}>
               <ScoreboardComponent
                 {...{
-                  name: "Atjes",
-                  collection: "atjes",
-                  type: "tijd",
+                  name: AchievementName.Atjes,
+                  collection: AchievementCollection.atjes,
+                  type: AchievementType.tijd,
                   direction: "asc",
                   limit: 25,
                 }}
               ></ScoreboardComponent>
             </Route>
-            <Route path="/rietas">
+            <Route path={["/rietas", "/rietas/new", "/rietas/:id"]}>
               <ScoreboardComponent
                 {...{
-                  name: "Rietas",
-                  collection: "rietas",
-                  type: "tijd",
+                  name: AchievementName.Rietas,
+                  collection: AchievementCollection.rietas,
+                  type: AchievementType.tijd,
                   direction: "asc",
                   limit: 25,
                 }}
               ></ScoreboardComponent>
             </Route>
-            <Route path="/gewicht">
+            <Route path={["/gewicht", "/gewicht/new", "/gewicht/:id"]}>
               <ScoreboardComponent
                 {...{
-                  name: "Zwaargewichten",
-                  collection: "gewicht",
-                  type: "gewicht",
+                  name: AchievementName.Zwaargewichten,
+                  collection: AchievementCollection.gewicht,
+                  type: AchievementType.gewicht,
                   direction: "desc",
                   limit: 10,
                 }}

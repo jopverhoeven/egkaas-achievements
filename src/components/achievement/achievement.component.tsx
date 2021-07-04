@@ -1,19 +1,19 @@
 import { useParams } from "react-router-dom";
 import Moment from "react-moment";
 
-import { firebase } from "../../firebase";
+import firebaseApp from "../../firebase";
 
 import "firebase/firestore";
 
 import { useDocument } from "react-firebase-hooks/firestore";
 import Achievement from "./achievement.interface";
 
-const firestore = firebase.firestore();
+const firestore = firebaseApp.firestore();
 
 export default function AchievementComponent(props: Achievement) {
   // @ts-ignore: id is lazy loaded
   let { id } = useParams();
-  const collection = firestore.collection(props.collection);
+  const collection = firestore.collection(props.collection.toString());
   const query = collection.doc(id);
 
   const [snapshot, loading, error] = useDocument(query);
@@ -45,7 +45,7 @@ export default function AchievementComponent(props: Achievement) {
             <div>{data?.name}</div>
             <div className="font-bold mt-2">Achievement type</div>
             <div>{props.name}</div>
-            <div className="font-bold mt-2">{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</div>
+            <div className="font-bold mt-2">{props.type.toString().charAt(0).toUpperCase() + props.type.toString().slice(1)}</div>
             {/* @ts-ignore */}
             <div>{data[props.type]}</div>
           </div>

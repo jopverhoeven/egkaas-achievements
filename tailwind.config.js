@@ -1,14 +1,20 @@
+const { url } = require("inspector");
+
 module.exports = {
   // Uncomment the line below to enable the experimental Just-in-Time ("JIT") mode.
   // https://tailwindcss.com/docs/just-in-time-mode
   // mode: "jit",
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: (theme) => ({
+        "beer-banner": url("./assets/images/beerbanner.jpg"),
+      }),
+    },
   },
   variants: {
     extend: {
-      transitionDuration: ['hover', 'focus'],
-    }
+      transitionDuration: ["hover", "focus"],
+    },
   },
   plugins: [],
   purge: {
