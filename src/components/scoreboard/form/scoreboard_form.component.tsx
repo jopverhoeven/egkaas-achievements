@@ -30,6 +30,7 @@ export default function ScoreboardFormComponent(props: ScoreboardForm) {
   }
 
   useEffect(() => {
+    console.log("tick");
     if (loading) return;
 
     if (!props) {
@@ -48,8 +49,7 @@ export default function ScoreboardFormComponent(props: ScoreboardForm) {
         history.push("/");
       }
     }
-  // eslint-disable-next-line
-  }, [loading]);
+  }, [loading, history, props, userData?.admin, userSnapshot?.exists]);
 
   return <div>Invulformulier</div>;
 }

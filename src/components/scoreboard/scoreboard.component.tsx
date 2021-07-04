@@ -15,16 +15,17 @@ const firestore = firebaseApp.firestore();
 const auth = firebaseApp.auth();
 
 export default function ScoreboardComponent(props: Scoreboard) {
+  
   const [user] = useAuthState(auth);
 
   const usersCollection = firestore.collection("users");
-  const userQuery = usersCollection.doc(user?.email!);
+  let userQuery;
+  
+  if (user) {
+    userQuery = usersCollection.doc(user?.email!);
+  }
 
   const [userSnapshot] = useDocument(userQuery);
-  let userData;
-  if (userSnapshot) {
-    userData = userSnapshot.data();
-  }
 
   const atjesRef = firestore.collection(props.collection.toString());
   const query = atjesRef
@@ -40,7 +41,7 @@ export default function ScoreboardComponent(props: Scoreboard) {
           <div className="text-3xl text-gray-200">
             Top {props.limit ? props.limit : 25} {props.name}
           </div>
-          {userData?.admin && (
+          {userSnapshot?.data()?.admin && (
             <Link to={`${props.collection.toString()}/new`}>
               <button className="p-2 bg-gray-500 rounded mt-4 hover:bg-gray-400 transform transition duration-300 ease-in-out hover:scale-105">
                 Nieuwe {props.type} toevoegen
