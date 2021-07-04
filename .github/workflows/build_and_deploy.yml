@@ -54,6 +54,9 @@ jobs:
   deploy:
     needs: [build-and-publish]
     runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [14.x]
     steps:
     - uses: actions/checkout@v2
 
