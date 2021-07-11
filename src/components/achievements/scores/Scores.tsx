@@ -91,8 +91,8 @@ export default function Scores() {
   if (!typeExists) return <div>{id} bestaat niet in de Achievements</div>;
 
   return (
-    <div className="flex-auto flex flex-col items-center">
-      <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
+    <div className="flex-auto flex flex-col items-center bg-gray-800 pb-4">
+      <div className="w-full p-2 bg-gray-600 flex flex-col items-center sticky top-0 z-50 shadow-3xl">
         <div className="flex flex-row w-full">
           <Link
             to="/achievements"
@@ -107,7 +107,10 @@ export default function Scores() {
         </div>
 
         {currentUser && (
-          <Link to={`/achievements/${id.toLowerCase()}/new`} className="p-1 mt-2 rounded bg-gray-500 hover:bg-gray-400">
+          <Link
+            to={`/achievements/${id.toLowerCase()}/new`}
+            className="p-1 mt-2 rounded bg-gray-500 hover:bg-gray-400"
+          >
             Voeg een nieuwe score toe
           </Link>
         )}
@@ -129,7 +132,9 @@ export default function Scores() {
                 key={i}
                 className="w-full flex flex-row justify-between p-2 mt-2 bg-gray-500 rounded"
               >
-                <h1 className="text-lg font-medium">{obj["name"]}</h1>
+                <h1 className="text-lg font-medium">
+                  #{i + 1} {obj["name"]}
+                </h1>
                 <h1 className="text-lg font-medium">
                   {obj["value"]}
                   {achievement!["unit"]["short"]}
