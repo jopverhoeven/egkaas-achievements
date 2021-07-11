@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../../contexts/auth.context";
 import { firestore } from "../../../firebase";
@@ -13,11 +13,7 @@ export default function Scores() {
   const [achievement, setAchievement] = useState(null);
   const [scores, setScores] = useState([]);
 
-  useEffect(() => {
-    fetchAchievements();
-  }, []);
-
-  const fetchAchievements = async () => {
+  const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
     let localAchievement;
 
@@ -65,7 +61,11 @@ export default function Scores() {
     } else {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchAchievements();
+  }, [fetchAchievements]);
 
   if (loading || !achievement)
     return <div className="flex flex-col items-center mt-2">Laden...</div>;
