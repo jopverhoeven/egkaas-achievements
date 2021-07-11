@@ -4,7 +4,7 @@ import GroupPhoto from "../../assets/images/groupphoto.jpeg";
 
 export default function Home() {
   return (
-    <div className="flex-auto flex flex-col items-center">
+    <div className="flex-auto flex flex-col items-center bg-gray-800 pb-4">
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
           <h1 className="text-3xl font-medium mt-2 mb-4">
             Welkom bij EGKaaS Achievements

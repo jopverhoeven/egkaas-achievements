@@ -10,6 +10,9 @@ module.exports = {
         "beer-banner": url("./assets/images/beerbanner.jpg"),
       }),
     },
+    boxShadow: {
+      '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+    }
   },
   variants: {
     extend: {
