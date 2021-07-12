@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Redirect, useParams } from "react-router-dom";
 import { useAuth } from "../../../contexts/auth.context";
 import { firestore } from "../../../firebase";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
+import Moment from "react-moment";
 
-export default function Scores() {
-  let { type } = useParams<{ type: string }>();
+export default function ScoreDetails() {
+  let { id, type } = useParams<{ id: string; type: string }>();
   //@ts-ignore
   const { currentUser } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [typeExists, setTypeExists] = useState(false);
   const [achievement, setAchievement] = useState(null);
-  const [scores, setScores] = useState([]);
+  const [score, setScore] = useState();
 
   const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
@@ -27,7 +28,8 @@ export default function Scores() {
       index++
     ) {
       const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase()) localTypeExists = true;
+      if (element.id.toLowerCase() === type.toLowerCase())
+        localTypeExists = true;
     }
 
     setTypeExists(localTypeExists);
@@ -44,28 +46,30 @@ export default function Scores() {
 
       setLoading(false);
 
-      const achievementScoresCollection = firestore
+      const achievementScore = firestore
         .collection("achievements")
         .doc(type.toLowerCase())
         .collection("scores")
-        .orderBy("value", localAchievement!["sort"]);
-      achievementScoresCollection.onSnapshot((data) => {
-        setScores(
-          // @ts-ignore
-          data.docs.map((data) => ({
+        .doc(id);
+      achievementScore.onSnapshot((data) => {
+        console.log(data.data());
+        if (data.exists)
+          setScore({
+            // @ts-ignore
             id: data.id,
-            name: data.data().name,
-            value: data.data().value,
-          }))
-        );
+            name: data.data()!.name,
+            value: data.data()!.value,
+          });
       });
     } else {
       setLoading(false);
     }
-  }, [type]);
+  }, [type, id]);
 
   useEffect(() => {
     fetchAchievements();
+
+    return () => {};
   }, [fetchAchievements]);
 
   if (loading)
@@ -74,7 +78,7 @@ export default function Scores() {
         <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
           <div className="flex flex-row w-full">
             <Link
-              to="/achievements"
+              to="/achievements/"
               className="flex items-center justify-center rounded bg-gray-500"
             >
               <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
@@ -88,14 +92,14 @@ export default function Scores() {
       </div>
     );
 
-  if (!typeExists) return <div>{type} bestaat niet in de Achievements</div>;
+  if (!typeExists) return <Redirect to={`/achievements/${type}`}></Redirect>;
 
   return (
     <div className="flex-auto flex flex-col items-center bg-gray-800 pb-4">
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center sticky top-0 z-50 shadow-3xl">
         <div className="flex flex-row w-full">
           <Link
-            to="/achievements"
+            to={`/achievements/${type}`}
             className="flex items-center justify-center rounded bg-gray-500"
           >
             <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
@@ -108,17 +112,21 @@ export default function Scores() {
 
         {currentUser && (
           <Link
-            to={`/achievements/${type.toLowerCase()}/new`}
+            to={`/achievements/${type.toLowerCase()}/${id}/edit`}
             className="p-1 mt-2 rounded bg-gray-500 hover:bg-gray-400"
           >
-            Voeg een nieuwe score toe
+            Wijzig score
           </Link>
         )}
       </div>
 
       {currentUser && <div></div>}
-      {scores.length > 0 && (
+      {score && (
         <div className="w-full sm:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
+          <div className="w-full flex justify-center px-2">
+            {/* @ts-ignore */}
+            Score gezet op: <Moment format="DD MMMM YYYY HH:mm" className="ml-1">{score!.creationDate}</Moment>
+          </div>
           <div className="w-full flex justify-between px-2">
             <h1 className="text-2xl font-medium">Naam</h1>
             <h1 className="text-2xl font-medium">
@@ -126,23 +134,13 @@ export default function Scores() {
                 String(achievement!["unit"]["full"]).slice(1)}
             </h1>
           </div>
-          {scores.map(function (obj, i) {
-            return (
-              <Link
-              to={`/achievements/${type.toLowerCase()}/${obj["id"]}`}
-                key={i}
-                className="w-full flex flex-row justify-between p-2 mt-2 bg-gray-500 hover:bg-gray-400 rounded"
-              >
-                <h1 className="text-lg font-medium">
-                  #{i + 1} {obj["name"]}
-                </h1>
-                <h1 className="text-lg font-medium">
-                  {obj["value"]}
-                  {achievement!["unit"]["short"]}
-                </h1>
-              </Link>
-            );
-          })}
+          <div className="flex flex-row justify-between px-2 w-full mt-2">
+            <h1 className="text-lg font-medium">{score!["name"]}</h1>
+            <h1 className="text-lg font-medium">
+              {score!["value"]}
+              {achievement!["unit"]["short"]}
+            </h1>
+          </div>
         </div>
       )}
     </div>
