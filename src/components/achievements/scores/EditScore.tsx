@@ -2,18 +2,20 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Redirect, useHistory, useParams } from "react-router-dom";
 // import { useAuth } from "../../../contexts/auth.context";
 import { firestore } from "../../../firebase";
-import { ArrowLeftIcon } from "@heroicons/react/solid";
+import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/solid";
 
-export default function NewScore() {
-  let { type } = useParams<{ type: string }>();
-  const nameRef = useRef();
-  const valueRef = useRef();
+export default function EditScore() {
+  let { id, type } = useParams<{ id: string; type: string }>();
 
   const [loading, setLoading] = useState(true);
   const [typeExists, setTypeExists] = useState(false);
   const [achievement, setAchievement] = useState(null);
   const [error, setError] = useState("");
+
   const history = useHistory();
+
+  const nameRef = useRef();
+  const valueRef = useRef();
 
   const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
@@ -28,7 +30,8 @@ export default function NewScore() {
       index++
     ) {
       const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase()) localTypeExists = true;
+      if (element.id.toLowerCase() === type.toLowerCase())
+        localTypeExists = true;
     }
 
     setTypeExists(localTypeExists);
@@ -44,27 +47,61 @@ export default function NewScore() {
       setAchievement(localAchievement);
 
       setLoading(false);
+
+      const achievementScore = await firestore
+        .collection("achievements")
+        .doc(type.toLowerCase())
+        .collection("scores")
+        .doc(id)
+        .get();
+
+      // @ts-ignore
+      nameRef.current.value = achievementScore.data().name;
+      // @ts-ignore
+      valueRef.current.value = achievementScore.data().value;
     } else {
       setLoading(false);
     }
-  }, [type]);
+  }, [type, id]);
 
   useEffect(() => {
     fetchAchievements();
+
+    return () => {};
   }, [fetchAchievements]);
+
+  async function handleDelete(e: Event) {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      await firestore
+        .collection("achievements")
+        .doc(`${type.toLowerCase()}`)
+        .collection("scores")
+        .doc(`${id}`)
+        .delete();
+
+      history.push(`/achievements/${type.toLowerCase()}`);
+    } catch {
+      setError("Kan niet verwijderen");
+      setLoading(false);
+    }
+  }
 
   async function handleSubmit(e: Event) {
     e.preventDefault();
 
     try {
-      setError("");
       setLoading(true);
 
-      firestore
+      await firestore
         .collection("achievements")
         .doc(`${type.toLowerCase()}`)
         .collection("scores")
-        .add({
+        .doc(`${id}`)
+        .set({
           //@ts-ignore
           name: nameRef.current.value,
           //@ts-ignore
@@ -112,9 +149,16 @@ export default function NewScore() {
             <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
           </Link>
           <h1 className="flex-auto text-3xl font-medium text-center">
-            Nieuw {achievement!["name"]}
+            Wijzig {achievement!["name"]}
           </h1>{" "}
-          <div className="h-8 w-8"></div>
+          <button
+            className="flex items-center justify-center rounded bg-gray-500"
+            // @ts-ignore
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            <TrashIcon className="h-8 w-8 p-1 text-white" />
+          </button>
         </div>
       </div>
       <div className="w-full sm:w-1/4">
@@ -128,24 +172,25 @@ export default function NewScore() {
           onSubmit={handleSubmit}
           className="bg-gray-600 rounded p-4 flex flex-col flex-auto mt-2"
         >
-          {/* Name */}
+          {/* Naam */}
           <section id="name" className="text-black flex flex-col flex-auto">
             <label className="text-white font-semibold text-md">Naam</label>
             <input
-              className="p-2 rounded"
-              placeholder="naam"
-              type="text"
               // @ts-ignore
               ref={nameRef}
+              className="p-2 rounded"
+              type="text"
               required
             ></input>
           </section>
-          {/* Value */}
+
+          {/* Waarde */}
           <section id="value" className="text-black flex flex-col flex-auto">
             <label className="text-white font-semibold text-md">
               {String(achievement!["unit"]["full"]).charAt(0).toUpperCase() +
                 String(achievement!["unit"]["full"]).slice(1)}
             </label>
+            {/* @ts-ignore */}
             <input
               className="p-2 rounded"
               // @ts-ignore

@@ -9,7 +9,7 @@ export default function Navbar() {
   
   return (
     <div
-      className="h-72 flex-shrink-0 sm:h-64 flex flex-col"
+      className="h-72 flex-shrink-0 sm:h-72 flex flex-col"
       style={{
         backgroundImage: "url(" + BeerBanner + ")",
         backgroundSize: "cover",
