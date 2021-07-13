@@ -55,10 +55,12 @@ export default function EditScore() {
         .doc(id)
         .get();
 
-      // @ts-ignore
-      nameRef.current.value = achievementScore.data().name;
-      // @ts-ignore
-      valueRef.current.value = achievementScore.data().value;
+      if (achievementScore.exists && achievementScore.data() !== undefined) {
+        // @ts-ignore
+        nameRef.current.value = achievementScore.data().name;
+        // @ts-ignore
+        valueRef.current.value = achievementScore.data().value;
+      }
     } else {
       setLoading(false);
     }
@@ -78,9 +80,9 @@ export default function EditScore() {
 
       await firestore
         .collection("achievements")
-        .doc(`${type.toLowerCase()}`)
+        .doc(type.toLowerCase())
         .collection("scores")
-        .doc(`${id}`)
+        .doc(id)
         .delete();
 
       history.push(`/achievements/${type.toLowerCase()}`);

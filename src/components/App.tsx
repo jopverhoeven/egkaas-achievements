@@ -10,6 +10,10 @@ import NewScore from "./achievements/scores/NewScore";
 import NewAchievement from "./achievements/NewAchievement";
 import ScoreDetails from "./achievements/scores/ScoreDetails";
 import EditScore from "./achievements/scores/EditScore";
+import Agenda from "./agenda/Agenda";
+import AgendaDetails from "./agenda/AgendaDetails";
+import EditAgenda from "./agenda/EditAgenda";
+import NewAgenda from "./agenda/NewAgenda";
 
 function App() {
   return (
@@ -40,6 +44,26 @@ function App() {
               path="/achievements/:type/:id/edit"
               exact
               component={EditScore}
+            ></PrivateRoute>
+            <PrivateRoute
+              path="/agenda"
+              exact
+              component={Agenda}
+            ></PrivateRoute>
+            <PrivateRoute
+              path="/agenda/new"
+              exact
+              component={NewAgenda}
+            ></PrivateRoute>
+            <PrivateRoute
+              path="/agenda/:id"
+              exact
+              component={AgendaDetails}
+            ></PrivateRoute>
+            <PrivateRoute
+              path="/agenda/:id/edit"
+              exact
+              component={EditAgenda}
             ></PrivateRoute>
             <Route path="/login" component={Login}></Route>
           </Switch>

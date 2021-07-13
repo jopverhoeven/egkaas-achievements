@@ -52,13 +52,13 @@ export default function ScoreDetails() {
         .collection("scores")
         .doc(id);
       achievementScore.onSnapshot((data) => {
-        console.log(data.data());
         if (data.exists)
           setScore({
             // @ts-ignore
             id: data.id,
             name: data.data()!.name,
             value: data.data()!.value,
+            creationDate: data.data()!.creationDate.seconds * 1000,
           });
       });
     } else {
@@ -125,7 +125,12 @@ export default function ScoreDetails() {
         <div className="w-full sm:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
           <div className="w-full flex justify-center px-2">
             {/* @ts-ignore */}
-            Score gezet op: <Moment format="DD MMMM YYYY HH:mm" className="ml-1">{score!.creationDate}</Moment>
+            Score gezet op:{" "}
+            <Moment
+              format="DD MMMM YYYY HH:mm"
+              className="ml-1"
+              date={score!["creationDate"]}
+            ></Moment>
           </div>
           <div className="w-full flex justify-between px-2">
             <h1 className="text-2xl font-medium">Naam</h1>
