@@ -79,4 +79,4 @@ jobs:
       continue-on-error: true
     
     - name: Run built Docker image
-      run: docker run -v /etc/letsencrypt/live/egkaas.jopverhoeven.nl/fullchain.pem:/certs/cert.pem -v /etc/letsencrypt/live/egkaas.jopverhoeven.nl/privkey.pem:/certs/key.pem -d -p 80:80 -p 443:443 ghcr.io/jopverhoeven/egkaas-achievements/egkaas-achievements:latest
+      run: docker run -v /etc/letsencrypt/live/egkaas.nl/fullchain.pem:/certs/cert.pem -v /etc/letsencrypt/live/egkaas.nl/privkey.pem:/certs/key.pem -d -p 80:80 -p 443:443 ghcr.io/jopverhoeven/egkaas-achievements/egkaas-achievements:latest
