@@ -159,7 +159,7 @@ export default function NewAchievement() {
             </label>
             <select
               className="p-2 rounded"
-              value={sort}
+              value={`${privacy}`}
               onChange={handlePrivate}
             >
               <option value="true">Ja</option>
