@@ -25,7 +25,7 @@ export default function NewScore() {
         //@ts-ignore
         title: titleRef.current.value,
         //@ts-ignore
-        date: new Date(dateRef.current.value).setHours(23, 59, 59),
+        date: new Date(new Date(dateRef.current.value).setHours(23, 59, 59)),
         // @ts-ignore
         location: locationRef.current.value,
         // @ts-ignore
