@@ -91,11 +91,11 @@ export default function NewAchievement() {
             className="text-black flex flex-col flex-auto mt-2"
           >
             <label className="text-white font-semibold text-md">
-              Opslagnaam
+              Opslagnaam - ALLES KLEIN EN AAN ELKAAR!!!
             </label>
             <input
               className="p-2 rounded"
-              placeholder="adtje"
+              placeholder="bv: 'adtje'"
               type="text"
               // @ts-ignore
               ref={storeRef}
@@ -108,7 +108,7 @@ export default function NewAchievement() {
             </label>
             <input
               className="p-2 rounded"
-              placeholder="Adtjes Trekken"
+              placeholder="bv: 'Adtjes Trekken'"
               type="text"
               // @ts-ignore
               ref={nameRef}
@@ -123,7 +123,7 @@ export default function NewAchievement() {
               // @ts-ignore
               ref={unitFullRef}
               type="text"
-              placeholder="bv. Tijd"
+              placeholder="bv: 'Tijd'"
               required
             ></input>
             <input
@@ -131,7 +131,7 @@ export default function NewAchievement() {
               // @ts-ignore
               ref={unitShortRef}
               type="text"
-              placeholder="bv. s"
+              placeholder="bv: 's'"
             ></input>
           </section>
           <section id="sort" className="text-black flex flex-col flex-auto">
