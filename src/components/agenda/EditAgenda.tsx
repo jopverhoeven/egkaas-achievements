@@ -25,7 +25,7 @@ export default function EditAgenda() {
 
       await firestore.collection("agenda").doc(id).delete();
 
-      history.push(`/agenda/${id}`);
+      history.push(`/agenda`);
     } catch {
       setError("Kan niet verwijderen");
       setLoading(false);
@@ -54,7 +54,7 @@ export default function EditAgenda() {
           creationDate: new Date(),
         });
 
-      history.push(`/agenda`);
+      history.push(`/agenda/${id}`);
     } catch {
       setError("Failed to write data");
       setLoading(false);
@@ -97,7 +97,7 @@ export default function EditAgenda() {
         <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
           <div className="flex flex-row w-full">
             <Link
-              to="/agenda"
+              to={`/agenda/${id}`}
               className="flex items-center justify-center rounded bg-gray-500"
             >
               <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
@@ -116,7 +116,7 @@ export default function EditAgenda() {
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
         <div className="flex flex-row w-full">
           <Link
-            to={`/agenda`}
+            to={`/agenda/${id}`}
             className="flex items-center justify-center rounded bg-gray-500"
           >
             <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
