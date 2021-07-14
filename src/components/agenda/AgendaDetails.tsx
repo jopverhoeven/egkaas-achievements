@@ -106,7 +106,7 @@ export default function AgendaDetails() {
               <p className="text-lg">{agenda!["location"]}</p>
             </div>
             {agenda!["description"] && (
-              <div className="flex flex-col mt-2r">
+              <div className="flex flex-col mt-2 whitespace-pre-line	">
                 <h1 className="text-lg font-semibold">Beschrijving</h1>
                 <p className="text-lg">{agenda!["description"]}</p>
               </div>
