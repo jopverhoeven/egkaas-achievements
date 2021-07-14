@@ -16,13 +16,14 @@ export default function Achievement() {
   const fetchAchievements = async () => {
     const response = firestore.collection("achievements");
     response.onSnapshot((data) => {
+
       //@ts-ignore
-      setAchievements(data.docs.map((items) => items.id));
+      setAchievements(data.docs.map((item) => ({id: item.id, name: item.data()["name"]})));
     });
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-gray-800">
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
         <div className="flex flex-row w-full">
           <Link to="/" className="flex items-center justify-center rounded bg-gray-500">
@@ -40,15 +41,15 @@ export default function Achievement() {
           </Link>
         )}
       </div>
-      <div className="flex flex-row w-full sm:w-1/3 justify-between flex-wrap">
+      <div className="flex flex-row w-full sm:w-1/3 justify-betwen flex-wrap sm:gap-x-2">
         {achievements.map(function (obj, i) {
           return (
             <Link
               key={i}
-              to={`/achievements/${obj}`}
-              className="m-4 p-4 rounded bg-gray-600 hover:bg-gray-500 w-1/4 sm:w-40 h-24 sm:h-40 flex items-center justify-center text-xl font-semibold"
+              to={`/achievements/${obj["id"]}`}
+              className="p-4 mt-2 mx-2 sm:mx-0 last:mb-2 rounded bg-gray-600 hover:bg-gray-500 w-full sm:w-40 h-24 sm:h-40 flex items-center justify-center text-xl font-semibold"
             >
-              {String(obj).charAt(0).toUpperCase() + String(obj).slice(1)}
+              {String(obj["name"]).charAt(0).toUpperCase() + String(obj["name"]).slice(1)}
             </Link>
           );
         })}

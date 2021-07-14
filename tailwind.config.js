@@ -20,6 +20,7 @@ module.exports = {
   variants: {
     extend: {
       transitionDuration: ["hover", "focus"],
+      margin: ["last"],
     },
   },
   plugins: [],
