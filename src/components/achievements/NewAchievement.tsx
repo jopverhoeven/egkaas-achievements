@@ -10,6 +10,7 @@ export default function NewAchievement() {
   const unitFullRef = useRef();
   const unitShortRef = useRef();
   const [sort, setSort] = useState("asc");
+  const [privacy, setPrivate] = useState(true);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,10 @@ export default function NewAchievement() {
 
   const handleDropdown = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(event.target.value);
+  };
+
+  const handlePrivate = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    event.target.value === "true" ? setPrivate(true) : setPrivate(false);
   };
 
   async function handleSubmit(e: Event) {
@@ -40,6 +45,7 @@ export default function NewAchievement() {
             // @ts-ignore
             full: unitFullRef.current.value,
           },
+          private: privacy,
         });
 
       history.push(`/achievements`);
@@ -80,10 +86,10 @@ export default function NewAchievement() {
           <div className="flex flex-col rounded bg-gray-500 p-2">
             <h1 className="font-semibold">Voorbeeld:</h1>
             <div className="ml-2 flex flex-col">
-                <h1>Opslagnaam: 'adtje'</h1>
-                <h1>Weergavenaam: 'Adtjes Trekken'</h1>
-                <h1>Eenheid: 'Tijd', 's'</h1>
-                <h1>Sorteermethode: 'Laag naar Hoog'</h1>
+              <h1>Opslagnaam: 'adtje'</h1>
+              <h1>Weergavenaam: 'Adtjes Trekken'</h1>
+              <h1>Eenheid: 'Tijd', 's'</h1>
+              <h1>Sorteermethode: 'Laag naar Hoog'</h1>
             </div>
           </div>
           <section
@@ -145,6 +151,19 @@ export default function NewAchievement() {
             >
               <option value="asc">Laag naar Hoog</option>
               <option value="desc">Hoog naar Laag</option>
+            </select>
+          </section>
+          <section id="private" className="text-black flex flex-col flex-auto">
+            <label className="text-white font-semibold text-md">
+              Privé categorie?
+            </label>
+            <select
+              className="p-2 rounded"
+              value={sort}
+              onChange={handlePrivate}
+            >
+              <option value="true">Ja</option>
+              <option value="false">Nee</option>
             </select>
           </section>
           <button

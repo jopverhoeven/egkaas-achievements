@@ -94,6 +94,9 @@ export default function ScoreDetails() {
 
   if (!typeExists) return <Redirect to={`/achievements/${type}`}></Redirect>;
 
+  if (achievement!["private"] && !currentUser)
+    return <Redirect to="/achievements"></Redirect>;
+
   return (
     <div className="flex-auto flex flex-col items-center bg-gray-800 pb-4">
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center sticky top-0 z-50 shadow-3xl">

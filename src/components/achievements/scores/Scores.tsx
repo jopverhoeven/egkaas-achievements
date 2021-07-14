@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Redirect, useParams } from "react-router-dom";
 import { useAuth } from "../../../contexts/auth.context";
 import { firestore } from "../../../firebase";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
@@ -27,7 +27,8 @@ export default function Scores() {
       index++
     ) {
       const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase()) localTypeExists = true;
+      if (element.id.toLowerCase() === type.toLowerCase())
+        localTypeExists = true;
     }
 
     setTypeExists(localTypeExists);
@@ -90,6 +91,9 @@ export default function Scores() {
 
   if (!typeExists) return <div>{type} bestaat niet in de Achievements</div>;
 
+  if (achievement!["private"] && !currentUser)
+    return <Redirect to="/achievements"></Redirect>;
+
   return (
     <div className="flex-auto flex flex-col items-center bg-gray-800 pb-4">
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center sticky top-0 z-50 shadow-3xl">
@@ -129,7 +133,7 @@ export default function Scores() {
           {scores.map(function (obj, i) {
             return (
               <Link
-              to={`/achievements/${type.toLowerCase()}/${obj["id"]}`}
+                to={`/achievements/${type.toLowerCase()}/${obj["id"]}`}
                 key={i}
                 className="w-full flex flex-row justify-between p-2 mt-2 bg-gray-500 hover:bg-gray-400 rounded"
               >
