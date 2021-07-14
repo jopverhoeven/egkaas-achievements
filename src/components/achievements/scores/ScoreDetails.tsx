@@ -125,7 +125,7 @@ export default function ScoreDetails() {
 
       {currentUser && <div></div>}
       {score && (
-        <div className="w-full sm:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
+        <div className="w-full sm:w-3/4 md:w-3/4 lg:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
           <div className="w-full flex justify-center px-2">
             {/* @ts-ignore */}
             Score gezet op:{" "}

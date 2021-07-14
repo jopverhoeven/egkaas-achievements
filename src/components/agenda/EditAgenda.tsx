@@ -134,7 +134,7 @@ export default function EditAgenda() {
           </button>
         </div>
       </div>
-      <div className="w-full sm:w-1/4">
+      <div className="w-full sm:w-3/4 md:w-3/4 lg:w-1/4">
         {error && (
           <div className="rounded p-2 bg-red-500 text-center font-medium mt-2">
             {error}

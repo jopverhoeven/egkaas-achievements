@@ -122,7 +122,7 @@ export default function Scores() {
 
       {currentUser && <div></div>}
       {scores.length > 0 && (
-        <div className="w-full sm:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
+        <div className="w-full sm:w-3/4 md:w-3/4 lg:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
           <div className="w-full flex justify-between px-2">
             <h1 className="text-2xl font-medium">Naam</h1>
             <h1 className="text-2xl font-medium">

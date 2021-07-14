@@ -87,7 +87,7 @@ export default function AgendaDetails() {
       </div>
 
       {agenda && (
-        <div className="w-full sm:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
+        <div className="w-full sm:w-3/4 md:w-3/4 lg:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
           <div className="flex flex-row justify-center px-2 w-full mt-2">
             <h1 className="text-2xl font-semibold text-center">
               {agenda!["title"]}

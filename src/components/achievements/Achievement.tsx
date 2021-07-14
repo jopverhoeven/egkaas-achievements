@@ -51,14 +51,14 @@ export default function Achievement() {
           </Link>
         )}
       </div>
-      <div className="flex flex-row w-full sm:w-1/3 justify-betwen flex-wrap sm:gap-x-2">
+      <div className="flex flex-row w-full  md:w-2/3 lg:w-1/2 justify-center flex-wrap sm:gap-x-2">
         {achievements.map(function (obj, i) {
           if (!obj["private"] || (obj["private"] && currentUser))
             return (
               <Link
                 key={i}
                 to={`/achievements/${obj["id"]}`}
-                className="p-4 mt-2 mx-2 sm:mx-0 last:mb-2 rounded bg-gray-600 hover:bg-gray-500 w-full sm:w-40 h-24 sm:h-40 flex items-center justify-center text-xl font-semibold"
+                className="p-4 mt-2 mx-2 sm:mx-0 last:mb-2 rounded bg-gray-600 hover:bg-gray-500 w-full sm:w-40 h-24 sm:h-40 flex items-center justify-center text-xl font-semibold text-center"
               >
                 {String(obj["name"]).charAt(0).toUpperCase() +
                   String(obj["name"]).slice(1)}

@@ -66,7 +66,7 @@ export default function Achievement() {
           Voeg een nieuw agendaitem toe
         </Link>
       </div>
-      <div className="flex flex-row w-full sm:w-1/3 justify-between flex-wrap p-2">
+      <div className="flex flex-row w-full sm:w-3/4 md:w-3/4 lg:w-1/3 justify-between flex-wrap p-2">
         {agenda.map(function (obj, i) {
           return (
             <Link
@@ -102,7 +102,7 @@ export default function Achievement() {
         })}
       </div>
       {agendaHistory.length > 0 && (
-        <div className="flex flex-col w-full items-center sm:w-1/3 p-2">
+        <div className="flex flex-col w-full items-center sm:w-3/4 md:w-3/4 lg:w-1/3 p-2">
           <h1 className="w-full text-left text-xl font-semibold">Geschiedenis</h1>
           <div className="flex flex-row w-full justify-between flex-wrap">
             {agendaHistory.map(function (obj, i) {
