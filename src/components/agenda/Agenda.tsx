@@ -47,7 +47,7 @@ export default function Achievement() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-gray-800">
       <div className="w-full p-2 bg-gray-600 flex flex-col items-center sticky top-0 z-50 shadow-3xl">
         <div className="flex flex-row w-full">
           <Link

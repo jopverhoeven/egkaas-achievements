@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, Redirect, useParams } from "react-router-dom";
 import { useAuth } from "../../../contexts/auth.context";
 import { firestore } from "../../../firebase";
-import { ArrowLeftIcon } from "@heroicons/react/solid";
+import Banner from "../../navigation/Banner";
 
 export default function Scores() {
   let { type } = useParams<{ type: string }>();
@@ -51,7 +51,6 @@ export default function Scores() {
     }
 
     setLoading(false);
-
   }, [type]);
 
   useEffect(() => {
@@ -60,71 +59,45 @@ export default function Scores() {
 
   if (loading)
     return (
-      <div className="flex-auto flex flex-col items-center">
-        <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
-          <div className="flex flex-row w-full">
-            <Link
-              to="/achievements"
-              className="flex items-center justify-center rounded bg-gray-500"
-            >
-              <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
-            </Link>
-            <h1 className="flex-auto text-3xl font-medium text-center">
-              Laden...
-            </h1>{" "}
-            <div className="h-8 w-8"></div>
-          </div>
-        </div>
-      </div>
+      <Banner
+        {...{
+          backButtonUrl: `/achievements`,
+          text: `Laden...`,
+          showActionButton: false,
+          showDeleteButton: false,
+        }}
+      />
     );
 
-  if (!typeExists) return <div className="flex-auto flex flex-col items-center">
-        <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
-          <div className="flex flex-row w-full">
-            <Link
-              to="/achievements"
-              className="flex items-center justify-center rounded bg-gray-500"
-            >
-              <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
-            </Link>
-            <h1 className="flex-auto text-3xl font-medium text-center">
-              De categorie '{type}' bestaat niet 
-            </h1>{" "}
-            <div className="h-8 w-8"></div>
-          </div>
-        </div>
-      </div>;
+  if (!typeExists)
+    return (
+      <Banner
+        {...{
+          backButtonUrl: `/achievements`,
+          text: `De achievement '${type}' bestaat niet`,
+          showActionButton: false,
+          showDeleteButton: false,
+        }}
+      />
+      
+    );
 
   if (achievement!["private"] && !currentUser)
     return <Redirect to="/achievements"></Redirect>;
 
   return (
     <div className="flex-auto flex flex-col items-center bg-gray-800 pb-4">
-      <div className="w-full p-2 bg-gray-600 flex flex-col items-center sticky top-0 z-50 shadow-3xl">
-        <div className="flex flex-row w-full">
-          <Link
-            to="/achievements"
-            className="flex items-center justify-center rounded bg-gray-500"
-          >
-            <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
-          </Link>
-          <h1 className="flex-auto text-3xl font-medium text-center">
-            Highscores {achievement!["name"]}
-          </h1>{" "}
-          <div className="h-8 w-8"></div>
-        </div>
+      <Banner
+        {...{
+          backButtonUrl: `/achievements`,
+          text: `Highscores ${achievement!["name"]}`,
+          showActionButton: true,
+          actionButtonText: "Voeg een nieuwe score toe",
+          actionButtonUrl: `/achievements/${type.toLowerCase()}/new`,
+          showDeleteButton: false,
+        }}
+      />
 
-        {currentUser && (
-          <Link
-            to={`/achievements/${type.toLowerCase()}/new`}
-            className="p-1 mt-2 rounded bg-gray-500 hover:bg-gray-400"
-          >
-            Voeg een nieuwe score toe
-          </Link>
-        )}
-      </div>
-
-      {currentUser && <div></div>}
       {scores.length > 0 && (
         <div className="w-full sm:w-3/4 md:w-3/4 lg:w-1/4 mt-4 bg-gray-600 sm:rounded p-4">
           <div className="w-full flex justify-between px-2">
