@@ -17,36 +17,22 @@ export default function NewScore() {
 
   const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
-    let localAchievement;
+    let localAchievement: any;
 
-    const achievementCollection = firestore.collection("achievements");
-    const achievementCollectionDocs = await achievementCollection.get();
+    const achievementDoc = await firestore
+      .collection("achievements")
+      .doc(type.toLowerCase())
+      .get();
+    if (achievementDoc.exists) {
+      localTypeExists = true;
 
-    for (
-      let index = 0;
-      index < achievementCollectionDocs.docs.length;
-      index++
-    ) {
-      const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase()) localTypeExists = true;
-    }
-
-    setTypeExists(localTypeExists);
-
-    if (localTypeExists) {
-      const achievementCollectionDoc = await firestore
-        .collection("achievements")
-        .doc(type.toLowerCase())
-        .get();
-
-      localAchievement = achievementCollectionDoc.data();
-      //@ts-ignore
+      localAchievement = achievementDoc.data();
+      // @ts-ignore
       setAchievement(localAchievement);
-
-      setLoading(false);
-    } else {
-      setLoading(false);
+      setTypeExists(localTypeExists);
     }
+
+    setLoading(false);
   }, [type]);
 
   useEffect(() => {

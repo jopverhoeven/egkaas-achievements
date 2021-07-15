@@ -10,44 +10,32 @@ export default function EditScore() {
   const [loading, setLoading] = useState(true);
   const [typeExists, setTypeExists] = useState(false);
   const [achievement, setAchievement] = useState(null);
+  const [score, setScore] = useState(null);
   const [error, setError] = useState("");
 
   const history = useHistory();
 
-  const nameRef = useRef();
-  const valueRef = useRef();
+  const nameRef = useRef(null);
+  const valueRef = useRef(null);
 
   const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
-    let localAchievement;
+    let localAchievement: any;
 
-    const achievementCollection = firestore.collection("achievements");
-    const achievementCollectionDocs = await achievementCollection.get();
+    const achievementDoc = await firestore
+      .collection("achievements")
+      .doc(type.toLowerCase())
+      .get();
+    if (achievementDoc.exists) {
+      localTypeExists = true;
 
-    for (
-      let index = 0;
-      index < achievementCollectionDocs.docs.length;
-      index++
-    ) {
-      const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase())
-        localTypeExists = true;
+      localAchievement = achievementDoc.data();
+      // @ts-ignore
+      setAchievement(localAchievement);
+      setTypeExists(localTypeExists);
     }
 
-    setTypeExists(localTypeExists);
-
     if (localTypeExists) {
-      const achievementCollectionDoc = await firestore
-        .collection("achievements")
-        .doc(type.toLowerCase())
-        .get();
-
-      localAchievement = achievementCollectionDoc.data();
-      //@ts-ignore
-      setAchievement(localAchievement);
-
-      setLoading(false);
-
       const achievementScore = await firestore
         .collection("achievements")
         .doc(type.toLowerCase())
@@ -55,16 +43,13 @@ export default function EditScore() {
         .doc(id)
         .get();
 
-      if (achievementScore.exists && achievementScore.data() !== undefined) {
-        // @ts-ignore
-        nameRef.current.value = achievementScore.data().name;
-        // @ts-ignore
-        valueRef.current.value = achievementScore.data().value;
-      }
-    } else {
-      setLoading(false);
+      if (!achievementScore.exists) history.push(`/achievements/${type}`);
+
+      // @ts-ignore
+      setScore(achievementScore.data());
     }
-  }, [type, id]);
+    setLoading(false);
+  }, [type, id, history]);
 
   useEffect(() => {
     fetchAchievements();
@@ -169,49 +154,53 @@ export default function EditScore() {
             {error}
           </div>
         )}
-        <form
-          // @ts-ignore
-          onSubmit={handleSubmit}
-          className="bg-gray-600 rounded p-4 flex flex-col flex-auto mt-2"
-        >
-          {/* Naam */}
-          <section id="name" className="text-black flex flex-col flex-auto">
-            <label className="text-white font-semibold text-md">Naam</label>
-            <input
-              // @ts-ignore
-              ref={nameRef}
-              className="p-2 rounded"
-              type="text"
-              required
-            ></input>
-          </section>
-
-          {/* Waarde */}
-          <section id="value" className="text-black flex flex-col flex-auto">
-            <label className="text-white font-semibold text-md">
-              {String(achievement!["unit"]["full"]).charAt(0).toUpperCase() +
-                String(achievement!["unit"]["full"]).slice(1)}
-            </label>
-            {/* @ts-ignore */}
-            <input
-              className="p-2 rounded"
-              // @ts-ignore
-              ref={valueRef}
-              type="number"
-              placeholder="0"
-              min="0"
-              step=".01"
-              required
-            ></input>
-          </section>
-          <button
-            disabled={loading}
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-400 rounded p-2 font-medium mt-2"
+        {score && (
+          <form
+            // @ts-ignore
+            onSubmit={handleSubmit}
+            className="bg-gray-600 rounded p-4 flex flex-col flex-auto mt-2"
           >
-            Invoeren
-          </button>
-        </form>
+            {/* Naam */}
+            <section id="name" className="text-black flex flex-col flex-auto">
+              <label className="text-white font-semibold text-md">Naam</label>
+              <input
+                // @ts-ignore
+                ref={nameRef}
+                defaultValue={score!["name"]}
+                className="p-2 rounded"
+                type="text"
+                required
+              ></input>
+            </section>
+
+            {/* Waarde */}
+            <section id="value" className="text-black flex flex-col flex-auto">
+              <label className="text-white font-semibold text-md">
+                {String(achievement!["unit"]["full"]).charAt(0).toUpperCase() +
+                  String(achievement!["unit"]["full"]).slice(1)}
+              </label>
+              {/* @ts-ignore */}
+              <input
+                className="p-2 rounded"
+                // @ts-ignore
+                ref={valueRef}
+                type="number"
+                defaultValue={score!["value"]}
+                placeholder="0"
+                min="0"
+                step=".01"
+                required
+              ></input>
+            </section>
+            <button
+              disabled={loading}
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-400 rounded p-2 font-medium mt-2"
+            >
+              Invoeren
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

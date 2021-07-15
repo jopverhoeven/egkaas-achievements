@@ -16,40 +16,28 @@ export default function Scores() {
 
   const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
-    let localAchievement;
+    let localAchievement: any;
 
-    const achievementCollection = firestore.collection("achievements");
-    const achievementCollectionDocs = await achievementCollection.get();
+    const achievementDoc = await firestore
+      .collection("achievements")
+      .doc(type.toLowerCase())
+      .get();
+    if (achievementDoc.exists) {
+      localTypeExists = true;
+      setTypeExists(localTypeExists);
 
-    for (
-      let index = 0;
-      index < achievementCollectionDocs.docs.length;
-      index++
-    ) {
-      const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase())
-        localTypeExists = true;
+      localAchievement = achievementDoc.data();
+      // @ts-ignore
+      setAchievement(localAchievement);
     }
 
-    setTypeExists(localTypeExists);
-
     if (localTypeExists) {
-      const achievementCollectionDoc = await firestore
-        .collection("achievements")
-        .doc(type.toLowerCase())
-        .get();
-
-      localAchievement = achievementCollectionDoc.data();
-      //@ts-ignore
-      setAchievement(localAchievement);
-
-      setLoading(false);
-
       const achievementScoresCollection = firestore
         .collection("achievements")
         .doc(type.toLowerCase())
         .collection("scores")
         .orderBy("value", localAchievement!["sort"]);
+
       achievementScoresCollection.onSnapshot((data) => {
         setScores(
           // @ts-ignore
@@ -60,9 +48,10 @@ export default function Scores() {
           }))
         );
       });
-    } else {
-      setLoading(false);
     }
+
+    setLoading(false);
+
   }, [type]);
 
   useEffect(() => {
@@ -89,7 +78,22 @@ export default function Scores() {
       </div>
     );
 
-  if (!typeExists) return <div>{type} bestaat niet in de Achievements</div>;
+  if (!typeExists) return <div className="flex-auto flex flex-col items-center">
+        <div className="w-full p-2 bg-gray-600 flex flex-col items-center">
+          <div className="flex flex-row w-full">
+            <Link
+              to="/achievements"
+              className="flex items-center justify-center rounded bg-gray-500"
+            >
+              <ArrowLeftIcon className="h-8 w-8 p-1 text-white" />
+            </Link>
+            <h1 className="flex-auto text-3xl font-medium text-center">
+              De categorie '{type}' bestaat niet 
+            </h1>{" "}
+            <div className="h-8 w-8"></div>
+          </div>
+        </div>
+      </div>;
 
   if (achievement!["private"] && !currentUser)
     return <Redirect to="/achievements"></Redirect>;

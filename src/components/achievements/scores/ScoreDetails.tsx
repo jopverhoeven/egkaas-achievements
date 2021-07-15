@@ -17,35 +17,22 @@ export default function ScoreDetails() {
 
   const fetchAchievements = useCallback(async () => {
     let localTypeExists = false;
-    let localAchievement;
+    let localAchievement: any;
 
-    const achievementCollection = firestore.collection("achievements");
-    const achievementCollectionDocs = await achievementCollection.get();
+    const achievementDoc = await firestore
+      .collection("achievements")
+      .doc(type.toLowerCase())
+      .get();
+    if (achievementDoc.exists) {
+      localTypeExists = true;
 
-    for (
-      let index = 0;
-      index < achievementCollectionDocs.docs.length;
-      index++
-    ) {
-      const element = achievementCollectionDocs.docs[index];
-      if (element.id.toLowerCase() === type.toLowerCase())
-        localTypeExists = true;
+      localAchievement = achievementDoc.data();
+      // @ts-ignore
+      setAchievement(localAchievement);
+      setTypeExists(localTypeExists);
     }
 
-    setTypeExists(localTypeExists);
-
     if (localTypeExists) {
-      const achievementCollectionDoc = await firestore
-        .collection("achievements")
-        .doc(type.toLowerCase())
-        .get();
-
-      localAchievement = achievementCollectionDoc.data();
-      //@ts-ignore
-      setAchievement(localAchievement);
-
-      setLoading(false);
-
       const achievementScore = firestore
         .collection("achievements")
         .doc(type.toLowerCase())
@@ -61,9 +48,9 @@ export default function ScoreDetails() {
             creationDate: data.data()!.creationDate.seconds * 1000,
           });
       });
-    } else {
-      setLoading(false);
     }
+
+    setLoading(false);
   }, [type, id]);
 
   useEffect(() => {

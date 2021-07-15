@@ -37,7 +37,7 @@ export default function NewAchievement() {
         .doc(storeRef.current.value)
         .set({
           // @ts-ignore
-          name: nameRef.current.value,
+          name: String(nameRef.current.value).toLowerCase(),
           sort: sort,
           unit: {
             // @ts-ignore
