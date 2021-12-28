@@ -1,2 +1,3 @@
 # EGKaaS Achievements
-trigger build
+trigger build 1
+
